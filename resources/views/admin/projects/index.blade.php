@@ -28,6 +28,7 @@
                     <th scope="col">Descrizione</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Tipo di linguaggio</th>
+                    <th scope="col">Techs</th>
                     <th scope="col">Tools</th>
                 </tr>
             </thead>
@@ -38,7 +39,19 @@
                         <td>{{ $project->title }}</td>
                         <td>{{ $project->description }}</td>
                         <td>{{ $project->client }}</td>
-                        <td>{{ $project->type?->name }}
+                        <td>{{ $project->type?->name }}</td>
+                        <td>
+                            @if ($project->technologies)
+                            <ul class="list-group">
+                                @foreach ($project->technologies as $tech)
+                                    <li class="list-group-item">{{ $tech->name }}</li>
+                                @endforeach
+                            </ul>
+                            @else
+                                <span>-</span>
+                            @endif
+                            
+                        </td>
                         <td>
                             <a href="{{ route('admin.project.show', $project->id) }}" class="btn btn-primary">Details</a>
                             <a href="{{ route('admin.project.edit', $project->id) }}" class="btn btn-warning">Edit</a>
@@ -47,7 +60,7 @@
                             @method('DELETE')
                             <button class="btn btn-danger" type="submit">Elimina</button>
                             </form>
-                          </td>
+                        </td>
                     </tr>    
                 @endforeach
                 
