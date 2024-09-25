@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    
+
 
 <div class="container-fluid">
 
-    <h4 class="mt-2">Lista tipologie di linguaggio</h4>
+    <h4 class="mt-2">Lista delle tecnologie</h4>
 
     @if($errors->any())
         <div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
@@ -28,19 +30,19 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.types.store') }}" method="POST">
+    <form action="{{ route('admin.technologies.store') }}" method="POST">
         @csrf
         <div class="input-group-text p-2">
-            <input type="text" class="form-control" placeholder="Aggiungi un linguaggio" name="name">
+            <input type="text" class="form-control" placeholder="Aggiungi una tech" name="name">
             <button type="submit" class="btn btn-warning m-2">Aggiungi</button>
         </div>
           
     </form>
 
     <ul class="list-group my-3">
-        @foreach ($types as $type)
-            <li class="list-group-item text-info d-flex justify-content-between">{{ $type->name }} 
-                <form action="{{ route('admin.types.destroy', $type) }}" method="POST" onsubmit="return confirm('Sei sicuro di eliminare il linguaggio {{ $type->name }}?')">
+        @foreach ($technologies as $tech)
+            <li class="list-group-item text-info d-flex justify-content-between">{{ $tech->name }} 
+                <form action="{{ route('admin.technologies.destroy', $tech) }}" method="POST" onsubmit="return confirm('Sei sicuro di eliminare la tecnologia {{ $tech->name }}?')">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger " type="submit">Elimina</button>
@@ -52,6 +54,5 @@
     </ul>
 
 </div>
-    
 
 @endsection
