@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProjectRequest;
 use Illuminate\Http\Request;
 use App\Models\Admin\Project;
 use App\Functions\Helper;
+use App\Models\Admin\Technology;
 use App\Models\Admin\Type;
 
 class ProjectController extends Controller
@@ -31,7 +32,9 @@ class ProjectController extends Controller
     {
         $types = Type::all();
 
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -47,6 +50,13 @@ class ProjectController extends Controller
         $new_project->fill($project);
         $new_project->slug = Helper::generateSlug($new_project->title, Project::class);
         $new_project->save();
+
+        // verifico che la chiave technologies esista nel project
+        if(array_key_exists('technologies', $project)){
+
+            // se esiste faccio l'attach
+            $new_project->technologies()->attach($project['technologies']);
+        }
 
 
         return redirect()->route('admin.project.show', $new_project->id);
@@ -68,8 +78,9 @@ class ProjectController extends Controller
 
         $types = Type::all();
         $data = ['HTML', 'CSS', 'Javascript', 'Php'];
+        $technologies = Technology::all();
 
-        return view('admin.projects.edit', compact('project', 'types', 'data'));
+        return view('admin.projects.edit', compact('project', 'types', 'data', 'technologies'));
     }
 
     /**
@@ -85,8 +96,20 @@ class ProjectController extends Controller
         } else {
             $data['slug'] = Helper::generateSlug($data['title'], Project::class);
         }
+        
 
         $project->update($data);
+
+
+        if(array_key_exists('technologies', $data)){
+            
+            // il sync aggiunge quelle mancanti
+            $project->technologies()->sync($data['technologies']);
+        } else {
+
+            // se non vengono inviati, devo cancellare tutte le relazioni con detach
+            $project->technologies()->detach();
+        }
 
         return redirect()->route('admin.project.show', $project);
     }

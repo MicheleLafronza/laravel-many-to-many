@@ -29,6 +29,19 @@
             <small class="text-danger"> {{ $message }}</small>
         @enderror
     </div>
+
+    <h3>Aggiungi tecnologie</h3>
+    @foreach ($technologies as $tech)
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="checkbox" value="{{ $tech->id }}" name="technologies[]" id="technology-{{ $tech->id }}" @if(in_array('technology-id', old('technologies', []))) checked @endif>
+        <label class="form-check-label" for="technology-{{ $tech->id }}">
+          {{ $tech->name }}
+        </label>
+    </div>
+    
+    @endforeach
+    
+
     <div class="mb-3">
         <label for="type" class="form lable">Tipo di linguaggio:</label>
         <select name="type_id" class="form-select" aria-label="Default select example">
