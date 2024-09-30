@@ -14,6 +14,8 @@ class Project extends Model
         'slug',
         'description',
         'client',
+        'path_image',
+        'image_original_name',
         'type_id'
     ];
 

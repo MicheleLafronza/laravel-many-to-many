@@ -9,6 +9,7 @@ use App\Models\Admin\Project;
 use App\Functions\Helper;
 use App\Models\Admin\Technology;
 use App\Models\Admin\Type;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -49,6 +50,22 @@ class ProjectController extends Controller
         $new_project = new Project();
         $new_project->fill($project);
         $new_project->slug = Helper::generateSlug($new_project->title, Project::class);
+
+
+        if(array_key_exists('path_image', $project)){
+            // se esiste la chiave
+            // salvo immagine nello storage nella cartella uploads
+            $image_path = Storage::put('uploads', $project['path_image']);
+
+            // ottengo il nome originale dell'immagine
+            $original_name = $request->file('path_image')->getClientOriginalName();
+
+            // aggiungo i valori a $data
+            $project['path_image'] = $image_path;
+            $project['image_original_name'] = $original_name;
+        }
+
+
         $new_project->save();
 
         // verifico che la chiave technologies esista nel project
@@ -91,7 +108,7 @@ class ProjectController extends Controller
         $data = $request->all();
         $project = Project::find($id);
 
-        if($data['title'] === $project->title){
+        if($data['title'] != $project->title){
             $data['slug'] = $project->slug;
         } else {
             $data['slug'] = Helper::generateSlug($data['title'], Project::class);

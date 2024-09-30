@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('title', 150);
             $table->string('slug', 255);
             $table->text('description');
+            $table->string('path_image', 255)->nullable();
+            $table->string('image_original_name', 255)->nullable();
             $table->string('client', 150);
             $table->timestamps();
         });

@@ -19,7 +19,7 @@
 
     @endif
 
-<form action="{{ route('admin.project.store') }}" method="POST">
+<form action="{{ route('admin.project.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="mb-3">
@@ -28,6 +28,16 @@
         @error('title')
             <small class="text-danger"> {{ $message }}</small>
         @enderror
+    </div>
+    
+    <div class="mb-3">
+        <label for="path_image" class="form-label">Immagine</label>
+        <input type="file" name="path_image"">
+    </div>
+
+    <div class="mb-3">
+        <label for="image_original_name" class="form-label">Immagine</label>
+        <input type="text" name="image_original_name"">
     </div>
 
     <h3>Aggiungi tecnologie</h3>
